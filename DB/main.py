@@ -14,10 +14,6 @@ def get_connection():
     return connection
 
 
-users_table_name = 'users'
-books_table_name = 'books'
-
-
 def insert_data(data, table_name):
     data_keys = tuple(data.keys())
     data_values = tuple(data.values())
@@ -39,16 +35,9 @@ def insert_data(data, table_name):
     return value
 
 
-def insert_order_items(items_data, table_name):
-    basket = items_data.pop('basket')
-    data_keys = list(items_data.keys())
-    data_keys += ['book_id', 'quantity']
-    data_values = tuple(items_data.values())
-
-    data_values = [data_values + tuple([book_id, quantity]) for (book_id, quantity) in basket.items()]
-
-    fields = ','.join(data_keys)
-    mask = ','.join(['%s'] * len(data_keys))
+def insert_order_items(data_values, fields_list, table_name):
+    fields = ','.join(fields_list)
+    mask = ','.join(['%s'] * len(fields_list))
 
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:
@@ -67,7 +56,7 @@ def insert_order_items(items_data, table_name):
 def get_user(id):
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f'SELECT * FROM {users_table_name} WHERE tg_id = %s OR id = %s', (id, id))
+            cursor.execute(f'SELECT * FROM `users` WHERE tg_id = %s OR id = %s', (id, id))
 
     return cursor.fetchone()
 
@@ -75,17 +64,33 @@ def get_user(id):
 def get_book(id):
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f'SELECT * FROM {books_table_name} WHERE id = %s', id)
+            cursor.execute(f'SELECT * FROM `books` WHERE id = %s', id)
 
     return cursor.fetchone()
 
 
-def get_all_books():
+def get_all_users_num():
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f'SELECT * FROM {books_table_name}')
+            cursor.execute(f'SELECT COUNT(id) as all_users_num FROM `users`')
 
-    return cursor.fetchall()
+    return cursor.fetchone()
+
+
+def get_all_drivers_num():
+    with closing(get_connection()) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f'SELECT COUNT(id) as all_drivers_num FROM `drivers`')
+
+    return cursor.fetchone()
+
+
+def get_all_active_drivers_num():
+    with closing(get_connection()) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f'SELECT COUNT(driver_id) as all_active_drivers_num FROM `active_drivers`')
+
+    return cursor.fetchone()
 
 
 def get_books(ids):
@@ -93,7 +98,7 @@ def get_books(ids):
 
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f'SELECT * FROM {books_table_name} WHERE id in ({interval}) ORDER BY id DESC')
+            cursor.execute(f'SELECT * FROM `books` WHERE id in ({interval}) ORDER BY id DESC')
 
     return cursor.fetchall()
 
@@ -126,7 +131,6 @@ def get_order(order_id):
 
 
 def get_orders_by_status(status):
-
     if isinstance(status, tuple):
         sql = f'SELECT * FROM orders WHERE orders.status = %s OR orders.status = %s ORDER BY id DESC'
     else:
@@ -156,7 +160,7 @@ def update_order_status(status, order_id):
 def update_user_info(id, **kwargs):
     if 'lang' in kwargs.keys():
         value = kwargs['lang']
-        sql = f'UPDATE testdb.{users_table_name} SET lang = %s WHERE tg_id = %s OR id = %s'
+        sql = f'UPDATE testdb.`users` SET lang = %s WHERE tg_id = %s OR id = %s'
 
     with closing(get_connection()) as connection:
         with connection.cursor() as cursor:

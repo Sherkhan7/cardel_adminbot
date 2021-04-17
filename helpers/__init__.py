@@ -1,1 +1,1 @@
-from .helpers import *
+from .helpers import wrap_tags

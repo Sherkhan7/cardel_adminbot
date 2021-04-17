@@ -2,7 +2,7 @@ from telegram.ext import Filters, MessageHandler, CallbackContext
 from telegram import Update, InlineKeyboardMarkup
 
 from DB import *
-from helpers import set_user_data, wrap_tags
+from helpers import wrap_tags
 from replykeyboards.replykeyboardtypes import reply_keyboard_types
 from replykeyboards.replykeyboardvariables import *
 from inlinekeyboards import InlineKeyboard

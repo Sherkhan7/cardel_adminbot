@@ -1,4 +1,4 @@
-from DB import get_main_menu_buttons
+# from DB import get_main_menu_buttons
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from .replykeyboardtypes import *
 

@@ -5,7 +5,7 @@ from config import ACTIVE_ADMINS
 from DB import insert_data
 
 from filters import *
-from helpers import set_user_data, wrap_tags
+from helpers import wrap_tags
 from languages import LANGS
 from globalvariables import *
 from replykeyboards import ReplyKeyboard

@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from DB import get_all_books
+from DB import get_all_users_num
 from .inlinekeyboardtypes import *
 
 
@@ -59,7 +59,7 @@ class InlineKeyboard(object):
 
         inline_keyboard = [
             [InlineKeyboardButton(f'\U0001F4D5  {book["title"]}', callback_data=f'book_{book["id"]}')]
-            for book in get_all_books()
+            for book in get_all_users_num()
         ]
 
         if data:

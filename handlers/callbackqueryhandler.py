@@ -3,7 +3,7 @@ from telegram import Update, ParseMode, InlineKeyboardMarkup
 from config import ACTIVE_ADMINS
 from DB import *
 
-from helpers import wrap_tags, set_user_data
+from helpers import wrap_tags
 from inlinekeyboards import InlineKeyboard
 from inlinekeyboards.inlinekeyboardvariables import *
 from globalvariables import *
