@@ -1,8 +1,8 @@
-import ujson
 from telegram.ext import Filters, CallbackContext, CommandHandler
 from telegram import Update
 
 from DB import get_all_users_num, get_all_drivers_num, get_all_active_drivers_num
+from config import ACTIVE_ADMINS
 
 
 def do_command(update: Update, context: CallbackContext):
@@ -10,16 +10,20 @@ def do_command(update: Update, context: CallbackContext):
     #     update_file.write(update.to_json())
 
     if update.message.text == '/getdata':
-        all_users_num = get_all_users_num()
-        all_drivers_num = get_all_drivers_num()
-        all_active_drivers_num = get_all_active_drivers_num()
+        if update.effective_user.id in ACTIVE_ADMINS:
+            all_users_num = get_all_users_num()
+            all_drivers_num = get_all_drivers_num()
+            all_active_drivers_num = get_all_active_drivers_num()
 
-        text = f'👥 Foydalanuvchilar soni: {all_users_num["all_users_num"]}\n\n' \
-               f'🚖 Haydovchilar soni: {all_drivers_num["all_drivers_num"]}\n\n' \
-               f'🚕 Aktiv haydovchilar soni: {all_active_drivers_num["all_active_drivers_num"]}'
+            text = f'👥 Foydalanuvchilar soni: {all_users_num["all_users_num"]}\n\n' \
+                   f'🚖 Haydovchilar soni: {all_drivers_num["all_drivers_num"]}\n\n' \
+                   f'🚕 Aktiv haydovchilar soni: {all_active_drivers_num["all_active_drivers_num"]}'
 
-        text = f'<b>{text}</b>'
-        update.message.reply_html(text)
+            text = f'<b>{text}</b>'
+            update.message.reply_html(text)
+        else:
+            text = f'<b>Taqiqlangan ! 😥</b>'
+            update.message.reply_html(text)
 
     # elif len(full_text) == 3:
     #     command = full_text[0]
