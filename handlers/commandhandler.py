@@ -20,10 +20,10 @@ def do_command(update: Update, context: CallbackContext):
                    f'🚕 Aktiv haydovchilar soni: {all_active_drivers_num["all_active_drivers_num"]}'
 
             text = f'<b>{text}</b>'
-            update.message.reply_html(text)
+            update.message.reply_text(text)
         else:
             text = f'<b>Taqiqlangan ! 😥</b>'
-            update.message.reply_html(text)
+            update.message.reply_text(text)
 
     # elif len(full_text) == 3:
     #     command = full_text[0]
